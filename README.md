@@ -1,30 +1,25 @@
 # ORBIT 交易观测站 · iPhone个人设备版
 
-原生SwiftUI、iOS17+。封面、图标、深色轨道视觉；今日/持仓/研究/复盘四个入口，点击查看证据和历史。无语音功能、模型权重、API密钥或内置账户数据。
+v0.2.0 build 2。原生封面、图标、钥匙串登录与HTTPS工作台。主界面与现有网页版使用同一套功能：持仓/现金录入与编辑、真实成交记录、公司调研、仓位和持仓调整建议、复盘、用户实盘与建议模拟盘回报追踪、周月总结。
 
-## 接口与数据
+首页精简，操作按钮在对应模块内。服务器界面更新后App同步使用；研究模型仍由服务器API调用。网页确认弹窗接到iOS确认框，未确认时不提交需确认的操作。
 
-服务端为本项目FastAPI；HTTPS入口配置完成后，在App设置中填写服务地址和网页用户名/密码。登录保存于设备钥匙串；URLSession拒绝跨地址重定向、不关闭证书校验、不允许明文HTTP。请先完成服务器端口与HTTPS配置。
+## 安全与账户
 
-- 首页：`GET /api/mobile/overview`，只读紧凑摘要，不调用模型。
-- 持仓与预警：`GET /api/monitor`；预警确认只标记已知悉。
-- 公司资料库：`GET /api/companies/library` 与单公司档案。
-- 复盘action：`GET /api/review/actions`；协议、逐次结果和人工观察分开保存。
-- 按需查证：`POST /api/review/query`；一次只读SQL规划，最多30行/12列/12000字符，结果不再回传给第二轮模型。
+- HTTPS校验使用系统信任，不绕过证书；登录仅提供给所配置服务器的相同HTTPS主机和端口。
+- 登录凭据保存在本机设备钥匙串，不进入网页JavaScript；工作台使用临时网页数据空间。
+- 外部证据链接由系统浏览器打开，不附加登录凭据。
+- 研究和预警辅助决策；真实成交由用户自行完成并录入。建议模拟盘与用户实盘分开核算。
+- 后台提醒沿用服务器Server酱，不宣称App锁屏后持续轮询。
 
-界面明确区分录入资产与实时净值、当前判断与旧记录、等待样本与已观察结果。后台通知继续由用户已有Server酱通道发送；App只在前台定时刷新，不宣称锁屏后持续盯盘。
+## 构建与安装
 
-## 沿用CosyVoice项目的构建与安装方式
+GitHub Actions使用macOS与XcodeGen编译unsigned IPA，无需向仓库上传Apple账号。仓库只包含独立iOS工程，不包含交易数据库、API密钥、密码或SSH密钥。
 
-将本文件夹作为独立仓库根目录。`.github/workflows/build-ios.yml`在macOS构建，生成 **unsigned IPA**，无需上传Apple账号。不要将整个交易系统仓库、data、.env、服务器登录凭据或SSH密钥上传。
+Windows使用[Sideloadly](https://sideloadly.io/)在本机登录自己的Apple ID完成个人签名安装。普通账号通常需要7天续签；依照工具与系统提示处理。见[Apple个人开发账号说明](https://developer.apple.com/help/account/basics/about-your-developer-account)。密码不写入仓库或聊天。
 
-1. 在已授权的GitHub仓库运行`Build Orbit Trading iOS`；下载unsigned产物。
-2. Windows使用现有[Sideloadly](https://sideloadly.io/)安装流程，在本机工具里登录普通Apple ID并签名安装到自己的iPhone；密码不写入本仓库或聊天。
-3. 普通账号的个人签名受Apple限制，通常需要7天续签；遵循工具和系统提示。可参考[Apple个人开发账号说明](https://developer.apple.com/help/account/basics/about-your-developer-account)。
-4. 有Mac时也可`brew install xcodegen`，运行`swift scripts/generate_icon.swift`与`xcodegen generate`，在Xcode的Signing选择自己的Personal Team、连接iPhone后Build & Run。
-
-云构建成功证明工程可编译；unsigned IPA仍需本机签名，不能标为已签名版本。实际安装与真机使用需要验收。GitHub构建是否占用免费额度由账户套餐与当期用量决定。
+App服务器地址填写https://43.128.79.120，使用现有网页账号。云构建成功证明可编译；真机签名、安装和WebKit登录仍需真机验收。
 
 ## 验收
 
-封面/图标正常；HTTPS登录；未知资产显示“—”；旧决策有历史标记；公司资料可点击展开；实验结果为空不冒充成功；保存观察可重试且不重复写入；前台刷新、退后台停止轮询；Server酱后台通知独立于App运行。
+封面与图标正常；登录到工作台；主页进入持仓后点击编辑可回填原值、保存后重新读取一致；公司调研、仓位建议、调仓建议、复盘按钮可触发各自既有工作流；网页确认框在App内正常显示；错误、等待和数据缺口不能显示成执行成功；用户实盘与建议模拟盘分开显示，缺失收益为未知；周月总结不携带全量历史上下文。

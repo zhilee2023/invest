@@ -16,7 +16,7 @@ jobs:
       - name: Check API decoding and unknown results
         run: |
           mkdir -p build-tests
-          swiftc Sources/Models.swift Tests/ModelChecks.swift -o build-tests/model-check
+          swiftc Sources/Models.swift Sources/WorkspacePolicy.swift Tests/ModelChecks.swift -o build-tests/model-check
           build-tests/model-check
           plutil -lint Info.plist
       - name: Generate cover icon and Xcode project
@@ -45,10 +45,10 @@ jobs:
           PY
           mkdir -p Payload
           cp -R build/Build/Products/Release-iphoneos/OrbitTrade.app Payload/
-          ditto -c -k --sequesterRsrc --keepParent Payload OrbitTrade-v0.1.0-build1-unsigned.ipa
+          ditto -c -k --sequesterRsrc --keepParent Payload OrbitTrade-v0.2.0-build2-unsigned.ipa
       - uses: actions/upload-artifact@v4
         with:
-          name: OrbitTrade-v0.1.0-build1-unsigned
-          path: OrbitTrade-v0.1.0-build1-unsigned.ipa
+          name: OrbitTrade-v0.2.0-build2-unsigned
+          path: OrbitTrade-v0.2.0-build2-unsigned.ipa
           if-no-files-found: error
           retention-days: 7

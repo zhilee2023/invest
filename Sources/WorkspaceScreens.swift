@@ -113,10 +113,9 @@ struct SettingsScreen: View {
                     Button(saving ? "正在连接…" : "验证并保存") { Task { saving = true;defer { saving = false };if await store.connect(ServerLogin(url:url,username:user,password:password)) { dismiss() } } }.disabled(saving || user.isEmpty || password.isEmpty)
                     if let error = store.error { Text(error).font(.caption).foregroundStyle(.orange) }
                 } header: { Text("连接交易服务器") } footer: { Text("登录凭据保存在本机钥匙串。HTTPS入口需先配置完成；地址中的IP不代表服务器已有有效证书。") }
-                Section("个人设备版") { Text("v0.1.0 · 个人研究辅助");Text("普通Apple ID通过个人签名安装，需定期续签。后台通知使用现有Server酱，App不在后台持续轮询。").font(.caption).foregroundStyle(OrbitTheme.muted) }
+                Section("个人设备版") { Text("v0.2.0 · 完整交易工作台");Text("与网页版使用相同的持仓编辑、研究、建议和复盘入口。普通Apple ID需定期续签；后台通知使用现有Server酱。").font(.caption).foregroundStyle(OrbitTheme.muted) }
                 if store.client != nil { Section { Button("退出并清除本机凭据",role:.destructive) { store.disconnect();password = "";dismiss() } } }
             }.navigationTitle("设置").toolbar { ToolbarItem(placement:.topBarTrailing) { Button("完成") { dismiss() } } }
         }
     }
 }
-
