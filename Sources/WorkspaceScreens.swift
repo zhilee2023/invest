@@ -106,16 +106,17 @@ struct SettingsScreen: View {
     var body: some View {
         NavigationStack {
             Form {
-                Section("连接交易服务器") {
+                Section {
                     TextField("HTTPS地址",text:$url).keyboardType(.URL).textInputAutocapitalization(.never).autocorrectionDisabled()
                     TextField("用户名",text:$user).textInputAutocapitalization(.never).autocorrectionDisabled()
                     SecureField("登录密码",text:$password)
                     Button(saving ? "正在连接…" : "验证并保存") { Task { saving = true;defer { saving = false };if await store.connect(ServerLogin(url:url,username:user,password:password)) { dismiss() } } }.disabled(saving || user.isEmpty || password.isEmpty)
                     if let error = store.error { Text(error).font(.caption).foregroundStyle(.orange) }
-                } footer: { Text("登录凭据保存在本机钥匙串。HTTPS入口需先配置完成；地址中的IP不代表服务器已有有效证书。") }
+                } header: { Text("连接交易服务器") } footer: { Text("登录凭据保存在本机钥匙串。HTTPS入口需先配置完成；地址中的IP不代表服务器已有有效证书。") }
                 Section("个人设备版") { Text("v0.1.0 · 个人研究辅助");Text("普通Apple ID通过个人签名安装，需定期续签。后台通知使用现有Server酱，App不在后台持续轮询。").font(.caption).foregroundStyle(OrbitTheme.muted) }
                 if store.client != nil { Section { Button("退出并清除本机凭据",role:.destructive) { store.disconnect();password = "";dismiss() } } }
             }.navigationTitle("设置").toolbar { ToolbarItem(placement:.topBarTrailing) { Button("完成") { dismiss() } } }
         }
     }
 }
+
