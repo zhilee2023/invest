@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="23000" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="cover-controller">
+ <device id="retina6_12" orientation="portrait" appearance="dark"/>
+ <dependencies><plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23000"/><capability name="Safe area layout guides" minToolsVersion="9.0"/></dependencies>
+ <scenes><scene sceneID="cover-scene"><objects>
+  <viewController id="cover-controller" sceneMemberID="viewController"><view key="view" contentMode="scaleToFill" id="cover-view">
+   <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+   <subviews>
+    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="ORBIT" textAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="cover-title"><rect key="frame" x="136" y="392" width="121" height="42"/><fontDescription key="fontDescription" type="system" weight="light" pointSize="34"/><color key="textColor" red="0.55" green="0.91" blue="0.92" alpha="1" colorSpace="custom" customColorSpace="sRGB"/></label>
+    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="研究 · 验证 · 决策" textAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="cover-subtitle"><rect key="frame" x="130" y="452" width="133" height="18"/><fontDescription key="fontDescription" type="system" pointSize="12"/><color key="textColor" red="0.56" green="0.64" blue="0.71" alpha="1" colorSpace="custom" customColorSpace="sRGB"/></label>
+   </subviews>
+   <viewLayoutGuide key="safeArea" id="cover-safe"/>
+   <color key="backgroundColor" red="0.027" green="0.043" blue="0.071" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+   <constraints><constraint firstItem="cover-title" firstAttribute="centerX" secondItem="cover-view" secondAttribute="centerX" id="title-x"/><constraint firstItem="cover-title" firstAttribute="centerY" secondItem="cover-view" secondAttribute="centerY" constant="-16" id="title-y"/><constraint firstItem="cover-subtitle" firstAttribute="centerX" secondItem="cover-view" secondAttribute="centerX" id="subtitle-x"/><constraint firstItem="cover-subtitle" firstAttribute="top" secondItem="cover-title" secondAttribute="bottom" constant="18" id="subtitle-y"/></constraints>
+  </view></viewController><placeholder placeholderIdentifier="IBFirstResponder" id="cover-first" sceneMemberID="firstResponder"/>
+ </objects></scene></scenes>
+</document>

@@ -1,0 +1,12 @@
+build/
+build-tests/
+Payload/
+*.ipa
+*.xcodeproj/
+*.xcworkspace/
+Resources/Assets.xcassets/
+.DS_Store
+*.p12
+*.mobileprovision
+*.pem
+.env

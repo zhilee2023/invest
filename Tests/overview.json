@@ -1,0 +1,7 @@
+{
+ "server_time":"2026-10-22T18:00:00","user":"test-user","account_known":false,"cash":null,
+ "recorded_market_value":0,"recorded_assets":null,"holdings":[],
+ "monitor":{"status":"outside_session","heartbeat_at":null,"active_alert_count":0,"alerts":[],"notification_configured":false},
+ "decision":null,"review":null,"company_count":0,"portfolio_notice":"合成测试数据，不是真实账户。",
+ "review_actions":[{"id":1,"trade_date":"2026-10-22","kind":"screening","experiment_key":"test:variant","title":"合成验证任务","target_stage":"screening","status":"waiting_data","protocol":{"baseline":"原始排序","challenger":"单变量备选","primary_metric":"excess_return_5d","success_condition":"跨批次核对","failure_condition":"核心前提证伪","next_check":"下一有效交易日"},"latest_result":{"metric":null,"status":"waiting_data"},"source_run_id":1}]
+}

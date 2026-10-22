@@ -1,0 +1,54 @@
+name: Build Orbit Trading iOS
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+permissions:
+  contents: read
+jobs:
+  build:
+    runs-on: macos-15
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install XcodeGen
+        run: brew install xcodegen
+      - name: Check API decoding and unknown results
+        run: |
+          mkdir -p build-tests
+          swiftc Sources/Models.swift Tests/ModelChecks.swift -o build-tests/model-check
+          build-tests/model-check
+          plutil -lint Info.plist
+      - name: Generate cover icon and Xcode project
+        run: |
+          swift scripts/generate_icon.swift
+          xcodegen generate
+      - name: Build unsigned personal-device app
+        run: |
+          xcodebuild -project OrbitTrade.xcodeproj -scheme OrbitTrade \
+            -configuration Release -sdk iphoneos -destination 'generic/platform=iOS' \
+            -derivedDataPath "$PWD/build" CODE_SIGNING_ALLOWED=NO build
+      - name: Verify and package unsigned IPA
+        run: |
+          python3 - <<'PY'
+          import plistlib
+          from pathlib import Path
+          root = Path('build/Build/Products/Release-iphoneos/OrbitTrade.app')
+          info = plistlib.loads((root/'Info.plist').read_bytes())
+          assert info['CFBundleIdentifier'] == 'com.orbitresearch.personal.trade'
+          assert info['UILaunchStoryboardName'] == 'LaunchScreen'
+          assert (root/'OrbitTrade').is_file()
+          assert not info.get('UIBackgroundModes'), 'Personal app must not pretend to poll indefinitely in background'
+          assert not info.get('NSAppTransportSecurity', {}).get('NSAllowsArbitraryLoads'), 'HTTPS required'
+          assert not list(root.rglob('*.db')) and not list(root.rglob('*.pem'))
+          print('Bundle, launch cover and privacy checks passed')
+          PY
+          mkdir -p Payload
+          cp -R build/Build/Products/Release-iphoneos/OrbitTrade.app Payload/
+          ditto -c -k --sequesterRsrc --keepParent Payload OrbitTrade-v0.1.0-build1-unsigned.ipa
+      - uses: actions/upload-artifact@v4
+        with:
+          name: OrbitTrade-v0.1.0-build1-unsigned
+          path: OrbitTrade-v0.1.0-build1-unsigned.ipa
+          if-no-files-found: error
+          retention-days: 7
